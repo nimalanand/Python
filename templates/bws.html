@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+  <h2>BWS Feedback: {{ assignment['recipient_name'] }} (Set {{ set_code }})</h2>
+  <p>Identify one <strong>Most descriptive (M)</strong> and one <strong>Least descriptive (L)</strong> statement for this set.</p>
+  <p>Least does not imply poor performance, only less defining relative to others shown.</p>
+  {% if is_submitted %}<p class="closed">Submitted. This form is now non-editable.</p>{% endif %}
+  <form method="post">
+    <table>
+      <thead><tr><th>Statement</th><th>Most (M)</th><th>Least (L)</th></tr></thead>
+      <tbody>
+      {% for code in set_statements %}
+      <tr>
+        <td>{{ statements[code] }}</td>
+        <td><input type="radio" name="mark_{{ code }}" value="M" {% if existing.get(code)=='M' %}checked{% endif %} {% if is_submitted or closed %}disabled{% endif %}></td>
+        <td><input type="radio" name="mark_{{ code }}" value="L" {% if existing.get(code)=='L' %}checked{% endif %} {% if is_submitted or closed %}disabled{% endif %}></td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+
+    {% if not is_submitted and not closed %}
+      {% if can_prev %}<button class="btn" type="submit" name="action" value="prev">Previous set</button>{% endif %}
+      {% if can_next %}<button class="btn" type="submit" name="action" value="next">Save & Next</button>{% endif %}
+      {% if is_last %}<button class="btn primary" type="submit" name="action" value="submit">Submit BWS</button>{% endif %}
+    {% endif %}
+  </form>
+</div>
+{% endblock %}

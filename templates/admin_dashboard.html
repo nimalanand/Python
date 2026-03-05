@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="grid-2">
+  <section class="card">
+    <h2>Program Administrator</h2>
+    <p>Please upload the input CSV file to activate feedback giver/recipient mappings.</p>
+    <form action="{{ url_for('upload_csv') }}" method="post" enctype="multipart/form-data">
+      <input type="file" name="csv_file" accept=".csv" required/>
+      <button class="btn primary" type="submit">Upload CSV</button>
+    </form>
+
+    <h3>Program Timeline</h3>
+    <form action="{{ url_for('set_end_date') }}" method="post">
+      <input type="date" name="end_date" value="{{ end_date }}" required/>
+      <button class="btn" type="submit">Update end date</button>
+    </form>
+    <p>Current end date: <strong>{{ end_date }}</strong></p>
+    {% if closed %}<p class="closed">Session is closed for feedback submission.</p>{% endif %}
+  </section>
+
+  <section class="card">
+    <h2>Exports</h2>
+    <p>Available only after program end date.</p>
+    <a class="btn" href="{{ url_for('export_method', method='likert') }}">Download Likert Output</a>
+    <a class="btn" href="{{ url_for('export_method', method='bws') }}">Download BWS Output</a>
+
+    <h3>Security</h3>
+    <form action="{{ url_for('change_password') }}" method="post">
+      <label>Current password</label>
+      <input type="password" name="current_password" required/>
+      <label>New password</label>
+      <input type="password" name="new_password" required/>
+      <button class="btn" type="submit">Change Password</button>
+    </form>
+  </section>
+</div>
+{% endblock %}
